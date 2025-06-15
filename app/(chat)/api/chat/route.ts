@@ -1,12 +1,21 @@
-import {
-  appendClientMessage,
-  appendResponseMessages,
-  createDataStream,
-  smoothStream,
-  streamText,
-} from 'ai';
-import { auth, type UserType } from '@/app/(auth)/auth';
-import { type RequestHints, systemPrompt } from '@/lib/ai/prompts';
+from openai import OpenAI
+client = OpenAI()
+
+response = client.responses.create(
+  model="gpt-4.1",
+  input=[],
+  text={
+    "format": {
+      "type": "text"
+    }
+  },
+  reasoning={},
+  tools=[],
+  temperature=1,
+  max_output_tokens=2048,
+  top_p=1,
+  store=True
+)
 import {
   createStreamId,
   deleteChatById,
