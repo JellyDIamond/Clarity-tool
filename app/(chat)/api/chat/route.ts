@@ -1,5 +1,6 @@
-import OpenAI from 'openai';
+
 import { OpenAIStream, StreamingTextResponse } from 'ai';
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
@@ -8,24 +9,22 @@ const openai = new OpenAI({
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
-  console.log("🛠️ Incoming messages:", messages); // Add this
-
   try {
+    const { messages } = await req.json();
+
+    console.log("🛠️ Messages received:", messages);
+
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo', // or 'gpt-4' if you have access
       stream: true,
       messages,
     });
 
     const stream = OpenAIStream(response);
+
     return new StreamingTextResponse(stream);
   } catch (err) {
-    console.error("❌ OpenAI Error:", err); // Add this
-    return new Response('AI Error', { status: 500 });
+    console.error("❌ Error in /api/chat:", err);
+    return new Response("Internal Server Error", { status: 500 });
   }
-}
-
-
-  return Response.json(deletedChat, { status: 200 });
 }
